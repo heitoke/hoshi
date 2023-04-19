@@ -9,6 +9,9 @@ import cookieParser from 'cookie-parser';
 
 import application, { register } from './libs/app';
 
+// * Discord Bot
+import Bot from './bot';
+
 // * Routes
 import userRoute from './routes/users'; 
 
@@ -16,7 +19,11 @@ dotenv.config();
 
 register();
 
-const app = express();
+const
+    app = express(),
+    bot = new Bot();
+
+bot.start();
 
 app.set('trust proxy', true);
 

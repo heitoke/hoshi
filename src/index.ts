@@ -38,6 +38,10 @@ app.use(cors({
     methods: 'GET, POST, PUT, PATCH, DELETE'
 }));
 
+app.get('/', (req, res) => {
+    res.redirect(`https://discord.com/invite/48DBJuKcEE`);
+});
+
 app.get('/linked-roles', application.authorization.setCookieAndRedirect.bind(application.authorization));
 
 app.get('/auth-callback', async (req, res) => {

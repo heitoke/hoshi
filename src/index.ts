@@ -50,9 +50,13 @@ app.get('/auth-callback', async (req, res) => {
 
         if (!application.authorization.checkRequiredScopesPresent(data.scopes)) return res.redirect('/linked-roles');
 
-        let user = data.user;
+        let user = data.user,
+            level = Number((Math.random() * Date.now()).toFixed(2).split('.')[1]);
 
-        application.setUserMetaData(user.id, user.username, { level: '24', xp: '523' });
+        application.setUserMetaData(user.id, user.username ,{
+            level: String(level),
+            xp: String(level * ((level * 12) * 24))
+        });
 
         res.status(200).json({ message: 'Successfully linked your account!', code: 200 });
     } catch (e) {

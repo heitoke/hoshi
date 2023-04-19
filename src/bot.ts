@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { REST, Routes, Client, GatewayIntentBits } from "discord.js";
+import { REST, Routes, Client, GatewayIntentBits, ActivityType } from "discord.js";
 
 dotenv.config();
 
@@ -45,6 +45,14 @@ class Bot {
 
         this.client.on('ready', () => {
             console.log(`Logged in as ${this.client.user.tag}!`);
+
+            this.client.user.setPresence({
+                activities: [{
+                    name: `${Math.floor(Math.random() * 999) - 0}`,
+                    type: ActivityType.Watching
+                }],
+                status: 'dnd'
+            });
         });
 
         this.client.on('interactionCreate', async interaction => {

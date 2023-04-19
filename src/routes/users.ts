@@ -15,7 +15,7 @@ router.get('/:userId', async (req, res) => {
     res.status(200).json({ user, metadata });
 });
 
-router.patch('/:userId', async (req, res) => {
+router.get('/:userId/update', async (req, res) => {
     let { userId } = req.params;
 
     if (!userId) return res.status(401).json({});

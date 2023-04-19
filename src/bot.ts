@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-import { REST, Routes, Client, GatewayIntentBits, ActivityType } from "discord.js";
+import { REST, Routes, Client, GatewayIntentBits, ActivityType, ChannelType } from "discord.js";
 
 dotenv.config();
 
@@ -18,7 +18,7 @@ class Bot {
 
         this.rest = new REST({ version: '10' }).setToken(this.applicationToken);
 
-        this.client = new Client({ intents: [GatewayIntentBits.Guilds] });
+        this.client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages] });
     }
 
     async registerCommands() {
@@ -54,6 +54,16 @@ class Bot {
                 status: 'dnd'
             });
         });
+
+        this.client.on('messageCreate', msg => {
+            if (msg.channel.type === ChannelType.DM) return;
+
+            let args = msg.content.split(' ');
+            
+            if (args[0] === '.send') {
+                msg.reply(`<@${msg.author.id}>: ${args.slice(1).join(' ')}`);
+            }
+        })
 
         this.client.on('interactionCreate', async interaction => {
             if (!interaction.isChatInputCommand()) return;

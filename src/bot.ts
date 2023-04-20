@@ -18,6 +18,7 @@ import {
 
 import { readdirSync } from 'fs';
 import path from 'path';
+import { $log } from './libs/logs';
 
 dotenv.config();
 
@@ -85,7 +86,7 @@ class Bot {
 
     async registerCommands() {
         try {
-            console.log('Started refreshing application (/) commands.');
+            $log.setOptions({ title: 'Load Commands' }).log('Started refreshing application (/) commands.');
 
             await this.rest.put(Routes.applicationCommands(this.applicationId), {
                 body: [
@@ -94,7 +95,7 @@ class Bot {
                 ]
             });
         
-            console.log('Successfully reloaded application (/) commands.');
+            $log.setOptions({ title: 'Load Commands' }).log('Successfully reloaded application (/) commands.');
         } catch (err) {
             console.error(err);
         }
@@ -104,7 +105,7 @@ class Bot {
         this.registerCommands();
 
         this.client.on('ready', () => {
-            console.log(`Logged in as ${this.client.user.tag}!`);
+            $log.setOptions({ title: 'BOT' }).log(`Logged in as ${this.client.user.tag}!`);
 
             this.client.user.setPresence({
                 activities: [{

@@ -13,7 +13,8 @@ import application, { register } from './libs/app';
 import Bot from './bot';
 
 // * Routes
-import userRoute from './routes/users'; 
+import userRoute from './routes/users';
+import { $log } from './libs/logs';
 
 dotenv.config();
 
@@ -64,7 +65,7 @@ app.get('/auth-callback', async (req, res) => {
 
         res.status(200).json({ message: 'Successfully linked your account!', code: 200 });
     } catch (e) {
-        console.log(e);
+        $log.setOptions({ type: 'error' }).log(e);
         res.status(500).json({ message: 'Server error', code: 500 });
     }
 });
@@ -73,7 +74,7 @@ app.use('/users', userRoute);
 
 let port = process.env.PORT || 5745,
     server = app.listen(port, () => {
-    console.log(`Server started http://localhost:${port}`);
+    $log.setOptions({ title: 'Web Server' }).log(`Server started http://localhost:${port}`);
 });
 
 export default server;

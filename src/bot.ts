@@ -22,6 +22,8 @@ import { $log } from './libs/logs';
 
 dotenv.config();
 
+declare function require(name:string): any;
+
 const { ID, TOKEN } = process.env;
 
 class Bot {
@@ -63,8 +65,9 @@ class Bot {
 
         try {
             for (let file of files) {
-                let command = (await import(path.join(folder, file))).default;
-
+                if (file.includes('.map')) continue;
+                const command = (await import(path.join(folder, file))).default;
+                
                 if (command instanceof ChatCommand) {
                     this.commands.set(command.data.name, command);
                 } else if (command instanceof UserContextMenuCommand) {
@@ -131,19 +134,18 @@ class Bot {
                 if (interaction.isChatInputCommand()) {
                     let command = this.commands.get(interaction.commandName);
 
-                    await command.execute(interaction, this.client);
+                    await command?.execute(interaction, this.client);
                 } else if (interaction.isUserContextMenuCommand()) {
                     let context = this.userContexts.get(interaction.commandName);
 
-                    await context.execute(interaction, this.client);
+                    await context?.execute(interaction, this.client);
                 } else if (interaction.isMessageContextMenuCommand()) {
                     let context = this.messageContexts.get(interaction.commandName);
 
-                    await context.execute(interaction, this.client);
+                    await context?.execute(interaction, this.client);
                 }
             } catch (err) {
                 console.log(err);
-                
             }
         });
           
